@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block start %}
+
+<div class="bg-white pt-8">
+    <div class="w-full h-[50vh] overflow-hidden">
+        <img class="-mt-80" src="https://wallpaperaccess.com/full/2690549.jpg">
+    </div>
+    <div class="py-16 px-32">
+        <div class="grid grid-cols-[3fr_1fr] gap-x-12">
+            <div>
+                <h1 class="text-4xl font-semibold my-4">{{hotels_obj.Hotel_Name}}</h1>
+
+                <p class="w-4/5">{{hotels_obj.Hotel_Desc}}</p>
+
+            </div>
+            <div class="flex flex-col justify-center p-4 border-x-2 border-yellow-900/40">
+                <h2 class="text-xl">{{hotels_obj.location}}</h2>
+                <p class="text-3xl mb-2" style="font-family: 'Lobster', serif">
+                    rs. {{hotels_obj.Hotel_Price}}
+                </p>
+                <p><b>Room Count :</b> {{hotels_obj.room_count}}</p>
+                <button class="text-white bg-yellow-900/50 hover:bg-yellow-900 text-lg mt-4 px-4 py-2">
+                    <a href="/login/">Login</a>
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-y-4 my-32">
+            {%for amenities in hotels_obj.amenities.all %}
+            <p class="bg-yellow-700/40 border-x-2 border-yellow-900 text-yellow-900 text-lg p-4">
+                {{amenities.amenity_name}}
+            </p>
+            {% endfor %}
+        </div>
+
+        <div class="grid grid-cols-3">
+            <h1 class="text-4xl m-auto" style="font-family: 'Lobster', serif">Have a look -</h1>
+            <div class="grid grid-cols-2 col-span-2">
+                {% for image in hotels_obj.images.all %}
+                <img src="/media/{{image.images}}" style="height: 300px ; width: 400px; margin: 1vh 1vw ;">
+                {% endfor %}
+            </div>
+        </div>
+        {% if request.user.is_authenticated %}
+        <div class="filter-card">
+            <h5>You are logged in as {{request.user.username}}
+                <div class="btn btn-success">
+                    <a href="/login/" style="color: aliceblue; text-decoration: none;">Switch Account</a>
+                </div>
+            </h5>
+            <h5>Book Hotel</h5>
+            {%include "messages.html"%}
+            <form method="post">
+                {% csrf_token %}
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <label for="mintopay">Check in</label>
+                        <p>
+                            <input type="date" name="checkin" id="checkin" class="form-control">
+                        </p>
+                    </div>
+                    <div class="col-md-12">
+                        <label for="maxtopay">Check out</label>
+                        <p>
+                            <input type="date" name="checkout" id="checkout" class="form-control">
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <input type="submit" class="btn btn-primary btn-block" value="Book">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% else %}
+
+
+    {% endif %}
+</div>
+{% endblock %}
